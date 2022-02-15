@@ -1,14 +1,43 @@
 <template>
-	<router-link to="/list">Lista zadań</router-link>
-	<router-link to="/task">Nowe zadanie</router-link>
-	<router-view></router-view>
+	<Sidebar @onChangeWidth="getSidebarWidth" />
+	<main :style="{ 'margin-left': width }">
+		<router-view></router-view>
+	</main>
 </template>
 
 <script>
+import Sidebar from "./components/Sidebar/Sidebar.vue";
+
 export default {
 	name: "App",
-	components: {},
+	components: { Sidebar },
+	data() {
+		return {
+			width: null,
+		};
+	},
+	methods: {
+		getSidebarWidth(value) {
+			return (this.width = value);
+		},
+	},
 };
 </script>
 
-<style></style>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+
+:root {
+	--color-primary: #055474;
+	--color-primary-active: #0a6880;
+}
+
+*,
+::after,
+::before {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Montserrat", sans-serif;
+}
+</style>
