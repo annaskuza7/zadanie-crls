@@ -28,8 +28,9 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 
 :root {
-	--color-primary: #055474;
-	--color-primary-active: #0a6880;
+	--color-primary: #22577a;
+	--color-primary-active: #38a3a5;
+	--color-secondary: #f5f3f5;
 }
 
 *,
