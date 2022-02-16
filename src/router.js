@@ -7,6 +7,7 @@ const router = createRouter({
 	history: createWebHistory(),
 	routes: [
 		{ path: "/list", component: TaskList },
+		{ path: "/task/:id", component: ManageTask },
 		{ path: "/task", component: ManageTask },
 		{ path: "/", redirect: "/list" },
 		{ path: "/:notFound(.*)", component: NotFound },

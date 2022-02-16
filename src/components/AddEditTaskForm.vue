@@ -35,7 +35,7 @@
 				<button class="btn btn-outline-primary" type="button">Powrót</button>
 			</router-link>
 			<button class="btn btn-primary" type="button" @click="submitForm">
-				Zapisz
+				{{ getButtonText }}
 			</button>
 		</div>
 	</form>
@@ -50,6 +50,9 @@ import TextareaField from "./Form/TextareaField.vue";
 import CheckboxField from "./Form/CheckboxField.vue";
 // import UploadField from "./Form/UploadField.vue";
 
+import { mapGetters } from "vuex";
+import { statusOptions, categoryOptions } from "../constants/variables";
+
 export default {
 	components: {
 		InputTextField,
@@ -58,33 +61,32 @@ export default {
 		CheckboxField,
 		// UploadField,
 	},
+	props: {
+		isEdit: {
+			type: Boolean,
+			required: true,
+		},
+	},
 	data() {
 		return {
 			v$: useValidate(),
+			id: undefined,
 			title: "",
 			category: "",
 			city: "",
 			comment: "",
 			status: "",
 			isPriority: false,
-			selectedFile: null,
-			categoryList: [
-				{ label: "Ubezpieczenie", value: "insurance" },
-				{ label: "Likwidacja szkody", value: "claim-adjustment" },
-				{ label: "Wycena nieruchomości", value: "real-estate-appraisal" },
-			],
-			statusList: [
-				{ label: "W toku", value: "inProgress" },
-				{ label: "Zaakceptowany", value: "positive" },
-				{ label: "Odrzucony", value: "negative" },
-			],
+			// selectedFile: null,
+			categoryList: categoryOptions,
+			statusList: statusOptions,
 		};
 	},
 	methods: {
 		submitForm() {
-			this.v$.$validate(); // checks all inputs
+			this.v$.$validate();
+
 			if (!this.v$.$error) {
-				// if ANY fail validation
 				const formData = {
 					title: this.title,
 					category: this.category,
@@ -94,12 +96,32 @@ export default {
 					isPriority: this.isPriority,
 				};
 
-				console.log(formData);
-
-				console.log("Form successfully submitted.");
-			} else {
-				console.log("Form failed validation");
+				if (this.isEdit) {
+					this.$store.dispatch("tasks/editTask", { ...formData, id: this.id });
+				} else {
+					this.$store.dispatch("tasks/addTask", formData);
+				}
 			}
+		},
+	},
+	watch: {
+		task() {
+			this.id = this.task?.id || undefined;
+			this.title = this.task?.title || "";
+			this.category = this.task?.category || "";
+			this.city = this.task?.city || "";
+			this.comment = this.task?.comment || "";
+			this.status = this.task?.status || "";
+			this.isPriority = this.task?.isPriority || false;
+		},
+	},
+	computed: {
+		...mapGetters({
+			isLoading: "tasks/isLoading",
+			task: "tasks/task",
+		}),
+		getButtonText() {
+			return this.isLoading ? "Wysyłanie..." : "Zapisz";
 		},
 	},
 	validations() {
