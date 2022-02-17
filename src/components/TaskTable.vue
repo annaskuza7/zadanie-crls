@@ -1,5 +1,5 @@
 <template>
-	<div class="table-responsive" v-if="items.length">
+	<div class="table-responsive" v-if="items.length && !isLoading">
 		<table class="table">
 			<thead>
 				<tr>
@@ -39,11 +39,16 @@
 			</tbody>
 		</table>
 	</div>
-	<p v-else>Brak danych do wyświetlenia</p>
+
+	<p class="info-message" v-if="!items.length && !isLoading">
+		Brak danych do wyświetlenia.
+	</p>
+	<p class="info-message" v-if="isLoading">Pobieranie danych...</p>
 </template>
 
 <script>
 import { statusOptions, categoryOptions } from "../constants/variables";
+import { mapGetters } from "vuex";
 
 export default {
 	props: {
@@ -79,6 +84,11 @@ export default {
 		onDelete(id) {
 			this.$store.dispatch("tasks/deleteTask", id);
 		},
+	},
+	computed: {
+		...mapGetters({
+			isLoading: "tasks/isLoading",
+		}),
 	},
 };
 </script>

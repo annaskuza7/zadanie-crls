@@ -13,18 +13,20 @@ export default {
 		};
 	},
 	mutations: {
+		setTasks(state, payload) {
+			state.tasks = payload;
+		},
 		addTask(state, payload) {
 			const newItem = {
 				id: uuidv4(),
 				...payload,
 			};
-
 			state.tasks.push(newItem);
 		},
 		setLoading(state, payload) {
 			state.loading = payload;
 		},
-		getTask(state, id) {
+		setTask(state, id) {
 			state.task = state.tasks.find((el) => el.id === id);
 		},
 		clearTask(state) {
@@ -43,6 +45,13 @@ export default {
 	},
 
 	actions: {
+		getTasks(context) {
+			context.commit("setLoading", true);
+			setTimeout(() => {
+				context.commit("setTasks", context.state.tasks);
+				context.commit("setLoading", false);
+			}, 500);
+		},
 		addTask(context, payload) {
 			context.commit("setLoading", true);
 			setTimeout(() => {
@@ -55,7 +64,7 @@ export default {
 		getTask(context, id) {
 			context.commit("setLoading", true);
 			setTimeout(() => {
-				context.commit("getTask", id);
+				context.commit("setTask", id);
 				context.commit("setLoading", false);
 			}, 200);
 		},

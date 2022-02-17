@@ -60,4 +60,11 @@ export default {
 	color: var(--color-primary-active);
 	border-color: var(--color-primary-active);
 }
+
+.info-message {
+	display: flex;
+	justify-content: center;
+	font-size: 1.1rem;
+	font-weight: 500;
+}
 </style>

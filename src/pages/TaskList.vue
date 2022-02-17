@@ -31,9 +31,13 @@ export default {
 			],
 		};
 	},
+	created() {
+		this.$store.dispatch("tasks/getTasks");
+	},
 	computed: {
 		...mapGetters({
 			tasks: "tasks/tasks",
+			isLoading: "tasks/isLoading",
 		}),
 	},
 };
